@@ -3,6 +3,7 @@ package dev.rightbehindu.game;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.rightbehindu.game.gfx.Assets;
 import dev.rightbehindu.game.states.GameState;
 import dev.rightbehindu.game.states.State;
 
@@ -96,6 +97,8 @@ public class Game implements Runnable {
 		//g.drawImage(Assets.Dungeon_Floor, 50, 50, null);
 		if(getState() != null) {
 			getState().render(g);
+			g.drawImage(Assets.Dungeon_Floor, 0, 0, null);
+			//g.fillRect(10,  10, 100,  100);
 		}
 		//End Drawing...
 		//---------------
