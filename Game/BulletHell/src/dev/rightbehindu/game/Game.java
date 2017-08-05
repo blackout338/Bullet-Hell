@@ -3,6 +3,8 @@ package dev.rightbehindu.game;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import dev.rightbehindu.game.gfx.Assets;
+import dev.rightbehindu.game.managers.KeyManager;
 import dev.rightbehindu.game.states.GameState;
 import dev.rightbehindu.game.states.State;
 
@@ -18,6 +20,10 @@ public class Game implements Runnable {
 	private Display display;
 	private BufferStrategy bs;
 	private Graphics g;
+	
+	// Managers //
+	
+	private KeyManager keyManager;
 	
 	// State Variables //
 	
@@ -67,7 +73,7 @@ public class Game implements Runnable {
 			
 			if(timer >= 1000000000) {
 				//If timer has been running for one second.
-				//System.out.println(ticks);
+				System.out.println(ticks);
 				this.fps = ticks;
 				ticks = 0;
 				timer = 0;
@@ -79,7 +85,9 @@ public class Game implements Runnable {
 	}
 	
 	private void tick() {
-		
+		if(getState() != null) {
+			getState().tick();
+		}
 	}
 	
 	private void render() {
@@ -96,6 +104,8 @@ public class Game implements Runnable {
 		//g.drawImage(Assets.Dungeon_Floor, 50, 50, null);
 		if(getState() != null) {
 			getState().render(g);
+			g.drawImage(Assets.Dungeon_Floor, 0, 0, null);
+			//g.fillRect(10,  10, 100,  100);
 		}
 		//End Drawing...
 		//---------------
@@ -106,9 +116,11 @@ public class Game implements Runnable {
 
 
 	private void init() {
+		this.keyManager = new KeyManager(this);
 		//Initialize the display.
 		this.display = new Display(title, width, height);
-		
+		this.display.getFrame().addKeyListener(keyManager);
+
 		//Initialize the game state.
 		this.gameState = new GameState(this);
 		setState(gameState);
